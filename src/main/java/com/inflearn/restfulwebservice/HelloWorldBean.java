@@ -12,7 +12,7 @@ public class HelloWorldBean {
     private String message;
 
     /**
-     * AllArgsConstructor Annotation으로 사자리게 되는 소스
+     * AllArgsConstructor Annotation으로 사자지게 되는 소스
      */
     /*
     public HelloWorldBean(String message) {
