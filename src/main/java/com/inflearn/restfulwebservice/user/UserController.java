@@ -7,6 +7,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+// GET    : 조회
+// POST   : 입력
+// PUT    : 수정
+// DELETE : 삭제
+
+
 @RestController
 public class UserController {
     private UserDaoService service;
@@ -48,5 +54,14 @@ public class UserController {
         // 저장 후 return시 200 OK가 아닌 201 Created로 Status 결과를 반환한다. 명확한 결과를 반환하는 것이 좋은 Rest API 설계이다.
         // 성공 코드 값(Status 결과)을 입력, 수정, 삭제 모두 200 OK로 반환하는 것은 좋지 않은 Rest API 설계이다.
         return ResponseEntity.created(location).build();
+    }
+
+    @DeleteMapping(path = "/users/{id}")
+    public void deleteUser(@PathVariable int id) {
+        User user = service.deleteById(id);
+
+        if(user == null) {
+            throw new UserNotFoundException(String.format("ID[%s] not found", id));
+        }
     }
 }

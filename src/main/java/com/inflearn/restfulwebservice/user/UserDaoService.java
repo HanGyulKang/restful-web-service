@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /* business logic은 Service 클래스에서 처리한다. */
@@ -36,6 +37,22 @@ public class UserDaoService {
     public User findOne(int id) {
         for(User user : users) {
             if(user.getId() == id) {
+                return user;
+            }
+        }
+
+        return null;
+    }
+
+    public User deleteById(int id) {
+        // Iterator : 열거형 데이터 / 배열 또는 List에 순차적으로 접근하기 위함
+        Iterator<User> iterator = users.iterator();
+
+        while(iterator.hasNext()) {
+            User user = iterator.next();
+
+            if(user.getId() == id) {
+                iterator.remove();
                 return user;
             }
         }
