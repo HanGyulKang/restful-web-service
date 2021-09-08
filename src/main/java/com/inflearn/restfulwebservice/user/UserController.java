@@ -24,7 +24,14 @@ public class UserController {
     // Get /users/1 or /users/10 -> 1, 10번과 같은 경우 server로 전달할 때 String으로 전달
     @GetMapping(path = "/users/{id}")
     public User retrieveUser(@PathVariable int id) {
-        return service.findOne(id);
+        User user = service.findOne(id);
+
+        // 조회된 결과가 없을 경우(null 값을 return 받았을 경우 예외처리...
+        if(user == null) {
+            throw new UserNotFoundException(String.format("ID[%s] not found", id));
+        }
+
+        return user;
     }
 
     // 상단의 전체 유저 조회 메소드와 path가 같지만 각각 Get, Post 방식으로 서로 다르기때문에 둘은 엄연히 다른 메소드이다.
@@ -32,6 +39,7 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User savedUser = service.save(user);
 
+        // 현재 요청된 Request URI에 path(저장된 User의 ID값)를 붙이고, Uri로 변환한 것을 location 변수에 담는다.
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                         .path("/{id}")
                         .buildAndExpand(savedUser.getId())
