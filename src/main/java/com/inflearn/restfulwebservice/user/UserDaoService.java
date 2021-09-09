@@ -59,4 +59,16 @@ public class UserDaoService {
 
         return null;
     }
+
+    // 과제 : 회원 정보 수정
+    public User modifyById(User user) {
+        for(User u : users) {
+            if(u.getId() == user.getId()) {
+                u.setName(user.getName());
+                return u;
+            }
+        }
+
+        return null;
+    }
 }

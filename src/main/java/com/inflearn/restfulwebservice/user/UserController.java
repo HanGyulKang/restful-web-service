@@ -12,7 +12,6 @@ import java.util.List;
 // PUT    : 수정
 // DELETE : 삭제
 
-
 @RestController
 public class UserController {
     private UserDaoService service;
@@ -63,5 +62,23 @@ public class UserController {
         if(user == null) {
             throw new UserNotFoundException(String.format("ID[%s] not found", id));
         }
+    }
+
+    @PutMapping(path = "/users")
+    public ResponseEntity<User> modifyUser(@RequestBody User user) {
+        // User 정보 변경(Name)
+        User modifiedUser = service.modifyById(user);
+
+        if(modifiedUser == null) {
+            throw new UserNotFoundException(String.format("ID[%s] not found", user.getId()));
+        }
+
+        // URI에 변경된 name을 붙인 후 return
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                        .path("/{name}")
+                        .buildAndExpand(modifiedUser.getName())
+                        .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 }
