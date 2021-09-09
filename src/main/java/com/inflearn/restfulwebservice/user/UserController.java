@@ -69,6 +69,7 @@ public class UserController {
         // User 정보 변경(Name)
         User modifiedUser = service.modifyById(user);
 
+        // 수정하고자 하는 User가 없을 시 요청받은 데이터의 id값을 message에 담아서 Exception 발생
         if(modifiedUser == null) {
             throw new UserNotFoundException(String.format("ID[%s] not found", user.getId()));
         }
