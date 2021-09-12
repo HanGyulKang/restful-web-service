@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class UserController {
 
     // 상단의 전체 유저 조회 메소드와 path가 같지만 각각 Get, Post 방식으로 서로 다르기때문에 둘은 엄연히 다른 메소드이다.
     @PostMapping(path = "/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         User savedUser = service.save(user);
 
         // 현재 요청된 Request URI에 path(저장된 User의 ID값)를 붙이고, Uri로 변환한 것을 location 변수에 담는다.
