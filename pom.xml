@@ -53,6 +53,12 @@
             <artifactId>hibernate-validator</artifactId>
             <version>6.0.7.Final</version>
         </dependency>
+        <!-- 요청에 대한 결과를 xml로 반환하기 위한 dependency 추가 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.10.2</version>
+        </dependency>
     </dependencies>
 
     <build>
