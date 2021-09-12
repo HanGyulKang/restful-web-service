@@ -1,12 +1,21 @@
 package com.inflearn.restfulwebservice.helloworld;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Locale;
 
 // @RestController : @Controller + @ResponseBody
 @RestController
 public class HelloWorldController {
+    // Annotation을 통한 의존성 주입
+    @Autowired
+    private MessageSource messageSource;
+
     // GET
     // URI : /hello-world (endpoint)
     // 기존 방식 : @RequestMapping(method=RequestMethod.GET, path="/hello-world")
@@ -26,5 +35,11 @@ public class HelloWorldController {
     public HelloWorldBean helloWorldBean(@PathVariable String name) {
         // RestController Annotation을 선언해두었다면 ResponseBody에 포함하지 않아도 자동으로 JSON 타입으로 반환한다.
         return new HelloWorldBean(String.format("Hello World, %s", name));
+    }
+
+    // 다국어 설정
+    @GetMapping(path = "/hello-world-internationalized")
+    public String helloWorldInternationalized(@RequestHeader(name="Accept-Language", required = false) Locale locale) {
+        return messageSource.getMessage("greeting.message", null, locale);
     }
 }
