@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 // GET    : 조회
@@ -42,12 +44,9 @@ public class AdminUserController {
         return mapping;
     }
 
-    // Get /admin/users/1 -> /admin/v1/users/1
-//    @GetMapping(path = "/v1/users/{id}") // 1. url로 버전 관리
-//    @GetMapping(value = "/users/{id}/", params = "version=1") // 2. parameter로 버전 관리
-//    @GetMapping(value = "/users/{id}", headers = "X-API-VERSION=1") // 3. header로 버전 관리
-    @GetMapping(value = "/users/{id}", produces = "application/vnd.company.appV1+xml") // 4. produces로 버전 관리
-    public MappingJacksonValue retrieveUserV1(@PathVariable int id) {
+    // Get /users/1 or /users/10 -> 1, 10번과 같은 경우 server로 전달할 때 String으로 전달
+    @GetMapping(path = "/users/{id}")
+    public MappingJacksonValue retrieveUser(@PathVariable int id) {
         User user = service.findOne(id);
 
         // 조회된 결과가 없을 경우(null 값을 return 받았을 경우 예외처리...
@@ -64,34 +63,6 @@ public class AdminUserController {
         MappingJacksonValue mapping = new MappingJacksonValue(user);
         mapping.setFilters(filters);
         // User Class의 JsonFilter를 활용한 방법 - E
-
-        return mapping;
-    }
-
-//    @GetMapping(path = "/v2/users/{id}") // 1. url로 버전 관리
-//    @GetMapping(value = "/users/{id}/", params = "version=2") // 2. parameter로 버전 관리
-//    @GetMapping(value = "/users/{id}", headers = "X-API-VERSION=2") // 3. header로 버전 관리
-    @GetMapping(value = "/users/{id}", produces = "application/vnd.company.appV2+json") // 4. produces로 버전 관리
-    public MappingJacksonValue retrieveUserV2(@PathVariable int id) {
-        User user = service.findOne(id);
-
-        // 조회된 결과가 없을 경우(null 값을 return 받았을 경우 예외처리...
-        if(user == null) {
-            throw new UserNotFoundException(String.format("ID[%s] not found", id));
-        }
-
-        // User -> User2 복사
-        UserV2 userV2 = new UserV2();
-        BeanUtils.copyProperties(user, userV2); // id, name, joinDate, password, ssn
-        userV2.setGrade("VIP");
-
-        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter
-                .filterOutAllExcept("id", "name", "joinDate", "grade");
-
-        FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfoV2", filter);
-
-        MappingJacksonValue mapping = new MappingJacksonValue(userV2);
-        mapping.setFilters(filters);
 
         return mapping;
     }
