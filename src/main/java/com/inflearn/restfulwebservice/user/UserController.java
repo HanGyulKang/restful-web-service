@@ -42,7 +42,7 @@ public class UserController {
             throw new UserNotFoundException(String.format("ID[%s] not found", id));
         }
 
-        // HATEOAS(Spring 2.2 이상의 경우)
+        // HATEOAS(Spring 2.2 이상의 경우) : 하나의 resource에서 파생되는 여러가지 추가 작업을 확인할 수 있음
         // Spring 2.2 이상
         EntityModel<User> model = new EntityModel<>(user);
         WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllUsers());
