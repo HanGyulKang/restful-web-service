@@ -48,6 +48,17 @@ public class UserController {
         WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllUsers());
         model.add(linkTo.withRel("all-users"));
 
+        // Spring 2.1.8.RELEASE
+        /*
+        Resource<User> resource = new Resource<>(user);
+        ControllerLinkBuilder linkTo = ControllerLinkBuilder.linkTo(
+            ControllerLinkBuilder.methodOn(this.getClass()).retrieveAllUsers());
+        )
+        resource.add(linkTo.withRel("all-users"));
+
+        return resource;
+         */
+
         return model;
     }
 
