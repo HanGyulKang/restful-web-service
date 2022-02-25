@@ -1,5 +1,7 @@
 package com.inflearn.restfulwebservice.user;
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -7,6 +9,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 // GET    : 조회
 // POST   : 입력
@@ -29,15 +34,21 @@ public class UserController {
 
     // Get /users/1 or /users/10 -> 1, 10번과 같은 경우 server로 전달할 때 String으로 전달
     @GetMapping(path = "/users/{id}")
-    public User retrieveUser(@PathVariable int id) {
+    public EntityModel<User> retrieveUser(@PathVariable int id) {
         User user = service.findOne(id);
 
-        // 조회된 결과가 없을 경우(null 값을 return 받았을 경우 예외처리...
+        // 조회된 결과가 없을 경우(null 값을 return 받았을 경우 예외처리...)
         if(user == null) {
             throw new UserNotFoundException(String.format("ID[%s] not found", id));
         }
 
-        return user;
+        // HATEOAS(Spring 2.2 이상의 경우)
+        // Spring 2.2 이상
+        EntityModel<User> model = new EntityModel<>(user);
+        WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllUsers());
+        model.add(linkTo.withRel("all-users"));
+
+        return model;
     }
 
     // 상단의 전체 유저 조회 메소드와 path가 같지만 각각 Get, Post 방식으로 서로 다르기때문에 둘은 엄연히 다른 메소드이다.
