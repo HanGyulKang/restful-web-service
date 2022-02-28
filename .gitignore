@@ -6,6 +6,7 @@ target/
 
 ### Spring Setting File
 src/main/resources/application.yml
+src/main/resources/data.sql
 
 ### STS ###
 .apt_generated
