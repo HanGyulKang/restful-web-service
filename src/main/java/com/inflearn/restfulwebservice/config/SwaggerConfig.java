@@ -2,6 +2,7 @@ package com.inflearn.restfulwebservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
@@ -14,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Configuration
-@EnableSwagger2
+//@EnableSwagger2
 public class SwaggerConfig {
     // 변경될 일이 없는...
     private static final Contact DEFAULT_CONTACT = new Contact("Han Gyul Kang",

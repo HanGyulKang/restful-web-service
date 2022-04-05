@@ -43,7 +43,9 @@ public class UserJpaController {
 
         // HATEOAS(Spring 2.2 이상의 경우) : 사용자가 하나의 resource에서 파생되는 여러가지 추가 작업을 확인할 수 있음
         // Spring 2.2 이상
-        EntityModel<User> model = new EntityModel<>(user.get());
+        // EntityModel<User> model = new EntityModel(user.get());
+        // Spring 2.6.* 이상
+        EntityModel<User> model = EntityModel.of(user.get());
         WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllUsers());
         model.add(linkTo.withRel("all-users"));
 
